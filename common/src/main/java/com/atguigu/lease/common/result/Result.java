@@ -20,12 +20,19 @@ public class Result<T> {
     public Result() {
     }
 
+    public Result(Integer code, String message){
+        this.code = code;
+        this.message = message;
+    }
+
     private static <T> Result<T> build(T data) {
         Result<T> result = new Result<>();
         if (data != null)
             result.setData(data);
         return result;
     }
+
+
 
     public static <T> Result<T> build(T body, ResultCodeEnum resultCodeEnum) {
         Result<T> result = build(body);
@@ -46,4 +53,9 @@ public class Result<T> {
     public static <T> Result<T> fail() {
         return build(null, ResultCodeEnum.FAIL);
     }
+
+    public static Result fail(Integer code, String message){
+        return new Result(code, message);
+    }
+
 }

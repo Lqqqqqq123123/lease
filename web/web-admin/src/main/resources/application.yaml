@@ -16,7 +16,22 @@ spring:
       minimum-idle: 10 #最小空闲连接数量
       pool-name: SPHHikariPool # 连接池名称
 
-#用于打印框架生成的sql语句，便于调试
+#  servlet:
+#    max-request-size: 100MB
+#    max-file-size: 10MB
+
+# 用于打印框架生成的sql语句，便于调试
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+
+# 属性类配置
+# minio相关属性
+ltb:
+  minio:
+      endpoint: http://43.143.165.110:9000
+      access-key: minioadmin
+      secret-key: minioadmin
+      bucket-name: lease
