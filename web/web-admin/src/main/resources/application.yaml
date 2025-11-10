@@ -35,3 +35,7 @@ ltb:
       access-key: minioadmin
       secret-key: minioadmin
       bucket-name: lease
+
+
+# 日志配置
+logging.level.root: info

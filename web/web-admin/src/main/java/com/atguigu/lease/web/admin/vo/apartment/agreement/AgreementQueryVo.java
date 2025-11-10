@@ -1,4 +1,4 @@
-package com.atguigu.lease.web.admin.vo.agreement;
+package com.atguigu.lease.web.admin.vo.apartment.agreement;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

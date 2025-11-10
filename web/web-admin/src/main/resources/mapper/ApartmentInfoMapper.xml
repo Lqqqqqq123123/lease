@@ -4,4 +4,80 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.atguigu.lease.web.admin.mapper.ApartmentInfoMapper">
 
+    <resultMap id="ApartmentItemVo" type="com.atguigu.lease.web.admin.vo.apartment.ApartmentItemVo">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="introduction" property="introduction"></result>
+        <result column="district_id" property="districtId"></result>
+        <result column="district_name" property="districtName"></result>
+        <result column="city_id" property="cityId"></result>
+        <result column="city_name" property="cityName"></result>
+        <result column="province_id" property="provinceId"></result>
+        <result column="province_name" property="provinceName"></result>
+        <result column="address_detail" property="addressDetail"></result>
+        <result column="latitude" property="latitude"></result>
+        <result column="longitude" property="longitude"></result>
+        <result column="phone" property="phone"></result>
+        <result column="is_release" property="isRelease"></result>
+        <result column="totalRoonCount" property="totalRoomCount"></result>
+        <result column="freeRoomCount" property="freeRoomCount"></result>
+    </resultMap>
+
+    <select id="customPage" resultMap="ApartmentItemVo">
+        SELECT
+            t3.id,
+            t3.name,
+            t3.introduction,
+            t3.district_id,
+            t3.district_name,
+            t3.city_id,
+            t3.city_name,
+            t3.province_id,
+            t3.province_name,
+            t3.address_detail,
+            t3.latitude,
+            t3.longitude,
+            t3.phone,
+            t3.is_release,
+            COALESCE(t4.totalRoomCount, 0) AS totalRoomCount,
+            COALESCE(t4.freeRoomCount, 0) AS freeRoomCount
+        FROM (
+            SELECT * from apartment_info tt
+                     <trim prefix="where" prefixOverrides="and | or">
+                            and tt.is_deleted = 0
+                         <if test="queryVo.provinceId != null">
+                            and tt.province_id = #{queryVo.provinceId}
+                         </if>
+                        <if test="queryVo.cityId != null">
+                            and tt.city_id = #{queryVo.cityId}
+                        </if>
+
+                        <if test="queryVo.districtId != null">
+                            and tt.district_id = #{queryVo.districtId}
+                        </if>
+                     </trim>
+                     ) t3
+                 LEFT JOIN (
+            SELECT
+                t1.apartment_id,
+                t1.totalRoomCount,
+                t1.totalRoomCount - COALESCE(t2.lendedRoomCount, 0) AS freeRoomCount
+            FROM
+                (SELECT apartment_id, COUNT(*) AS totalRoomCount
+                 FROM room_info
+                 WHERE is_deleted = 0
+                 GROUP BY apartment_id) t1
+                    LEFT JOIN
+                (SELECT apartment_id, COUNT(*) AS lendedRoomCount
+                 FROM lease_agreement
+                 WHERE is_deleted = 0 AND `status` IN (2, 5, 7)
+                 GROUP BY apartment_id) t2
+                ON t1.apartment_id = t2.apartment_id
+        ) t4 ON t3.id = t4.apartment_id
+    </select>
+
+
+    <select id="getDetailById" resultType="com.atguigu.lease.web.admin.vo.apartment.ApartmentDetailVo">
+        select * from apartment_info where id=#{id}
+    </select>
 </mapper>
