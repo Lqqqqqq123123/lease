@@ -8,11 +8,15 @@ import com.atguigu.lease.web.admin.vo.apartment.ApartmentDetailVo;
 import com.atguigu.lease.web.admin.vo.apartment.ApartmentItemVo;
 import com.atguigu.lease.web.admin.vo.apartment.ApartmentQueryVo;
 import com.atguigu.lease.web.admin.vo.apartment.ApartmentSubmitVo;
+import com.atguigu.lease.web.admin.vo.fee.FeeValueVo;
 import com.atguigu.lease.web.admin.vo.graph.GraphVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.databind.util.BeanUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -20,6 +24,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author liubo
@@ -42,6 +47,8 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
     private final ProvinceInfoService provinceInfoService;
     private final CityInfoService cityInfoService;
     private final DistrictInfoService districtInfoService;
+
+    private final FacilityInfoService facilityInfoService;
     @Override
     public boolean customSaveOrUpdate(ApartmentSubmitVo vo) {
 
@@ -149,20 +156,39 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
     }
 
     @Override
+
     public ApartmentDetailVo getDetailById(Long id) {
-        // todo
+        ApartmentDetailVo vo = new ApartmentDetailVo();
         // 1. 先查询公寓信息
         ApartmentInfo apartmentInfo = getById(id);
+        BeanUtils.copyProperties(apartmentInfo, vo);
+
         // 2. 查询公寓配套信息
-        // List<GraphVo> graphVoList = graphInfoService.getGraphListByItemIdAndItemType(id, ItemType.APARTMENT);
+        List<FacilityInfo> facilityInfoList = apartmentFacilityService.listFacilityInfoByApartmentId(id);
+        vo.setFacilityInfoList(facilityInfoList);
         // 3. 查询公寓杂费信息
+        List<FeeValueVo> feeValueVos = apartmentFeeValueService.listOfFeeValueVoByApartmentId(id);
+        vo.setFeeValueVoList(feeValueVos);
 
         // 4. 查询公寓标签信息
+        List<LabelInfo> labelInfoList = apartmentLabelService.listLabelInfoByApartmentId(id);
+        vo.setLabelInfoList(labelInfoList);
 
         // 5. 获取公寓图片信息
+        List<GraphVo> graphVos = new ArrayList<>();
+        LambdaQueryWrapper<GraphInfo> graphWrapper = new LambdaQueryWrapper<>();
+        graphWrapper.eq(GraphInfo::getItemId, id).eq(GraphInfo::getItemType, ItemType.APARTMENT);
+        List<GraphInfo> graphList = graphInfoService.list(graphWrapper);
 
+        // 5.1 遍历查出来的po，然后转vo
+        for (var g : graphList){
+            GraphVo graphVo = new GraphVo();
+            BeanUtils.copyProperties(g, graphVo);
+            graphVos.add(graphVo);
+        }
+        vo.setGraphVoList(graphVos);
         // 6. 封装vo
-        return null;
+        return vo;
     }
 
     @Override

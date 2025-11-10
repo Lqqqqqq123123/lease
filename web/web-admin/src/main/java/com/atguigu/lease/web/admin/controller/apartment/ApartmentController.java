@@ -63,7 +63,7 @@ public class ApartmentController {
      */
     public Result<ApartmentDetailVo> getDetailById(@RequestParam Long id) {
         ApartmentDetailVo vo = apartmentInfoService.getDetailById(id);
-        return Result.ok();
+        return Result.ok(vo);
     }
 
     @Operation(summary = "根据id删除公寓信息")
