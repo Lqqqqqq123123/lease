@@ -32,6 +32,7 @@ import java.util.List;
 public class ApartmentController {
 
     private final ApartmentInfoService apartmentInfoService;
+    private final ApartmentFacilityService apartmentFacilityService;
 
     @Operation(summary = "保存或更新公寓信息")
     @PostMapping("saveOrUpdate")
@@ -67,9 +68,12 @@ public class ApartmentController {
 
     @Operation(summary = "根据id删除公寓信息")
     @DeleteMapping("removeById")
+    /**
+     * 删除：多表删除，需要先删除中间表数据，再删除单表数据
+     */
     public Result removeById(@RequestParam Long id) {
-        boolean res = apartmentInfoService.removeById(id);
-        return res ? Result.ok() : Result.fail();
+       boolean res = apartmentInfoService.customRemoveById(id);
+       return res ? Result.ok() : Result.fail();
     }
 
     @Operation(summary = "根据id修改公寓发布状态")

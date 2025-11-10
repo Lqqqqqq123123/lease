@@ -165,6 +165,28 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
         return null;
     }
 
+    @Override
+    public boolean customRemoveById(Long id) {
+        // 删除公寓配套表
+        LambdaQueryWrapper<ApartmentFacility> facilityWrapper = new LambdaQueryWrapper<>();
+        facilityWrapper.eq(ApartmentFacility::getApartmentId, id);
+        apartmentFacilityService.remove(facilityWrapper);
+        // 删除公寓费用表
+        LambdaQueryWrapper<ApartmentFeeValue> feeWrapper = new LambdaQueryWrapper<>();
+        feeWrapper.eq(ApartmentFeeValue::getApartmentId, id);
+        apartmentFeeValueService.remove(feeWrapper);
+        // 删除公寓标签表
+        LambdaQueryWrapper<ApartmentLabel> labelWrapper = new LambdaQueryWrapper<>();
+        labelWrapper.eq(ApartmentLabel::getApartmentId, id);
+        apartmentLabelService.remove(labelWrapper);
+        // 删除公寓图片表
+        LambdaQueryWrapper<GraphInfo> graphWrapper = new LambdaQueryWrapper<>();
+        graphWrapper.eq(GraphInfo::getItemId, id).eq(GraphInfo::getItemType, ItemType.APARTMENT);
+        graphInfoService.remove(graphWrapper);
+        // 删除公寓表
+        return removeById(id);
+    }
+
     /**
      * 自定义公寓形象的分页查询，由于结果没有 po 直接与 数据表映射，故自己写xml文件
      * @param page:分页参数
