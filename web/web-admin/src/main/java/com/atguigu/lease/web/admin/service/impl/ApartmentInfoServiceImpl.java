@@ -1,5 +1,7 @@
 package com.atguigu.lease.web.admin.service.impl;
 
+import com.atguigu.lease.common.Exception.BusinessException;
+import com.atguigu.lease.common.result.ResultCodeEnum;
 import com.atguigu.lease.model.entity.*;
 import com.atguigu.lease.model.enums.ItemType;
 import com.atguigu.lease.web.admin.mapper.ApartmentInfoMapper;
@@ -47,6 +49,9 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
     private final ProvinceInfoService provinceInfoService;
     private final CityInfoService cityInfoService;
     private final DistrictInfoService districtInfoService;
+
+    // 房间信息service
+    private final RoomInfoService roomInfoService;
 
     private final FacilityInfoService facilityInfoService;
     @Override
@@ -193,6 +198,16 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
 
     @Override
     public boolean customRemoveById(Long id) {
+
+        // 在删除之前，需要检查该公寓是否还有房间
+        LambdaQueryWrapper<RoomInfo> roomWrapper = new LambdaQueryWrapper<>();
+        roomWrapper.eq(RoomInfo::getApartmentId, id);
+        long count = roomInfoService.count(roomWrapper);
+        if(count > 0){
+            // 如果为空，抛出业务异常 DELETE_ERROR(207, "请先删除子集"),
+            throw new BusinessException(ResultCodeEnum.DELETE_ERROR);
+        }
+
         // 删除公寓配套表
         LambdaQueryWrapper<ApartmentFacility> facilityWrapper = new LambdaQueryWrapper<>();
         facilityWrapper.eq(ApartmentFacility::getApartmentId, id);

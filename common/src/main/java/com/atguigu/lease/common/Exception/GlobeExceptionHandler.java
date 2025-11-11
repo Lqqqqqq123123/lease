@@ -22,4 +22,10 @@ public class GlobeExceptionHandler {
         log.error("全局异常捕获", e);
         return Result.fail();
     }
+
+    @ExceptionHandler(BusinessException.class)
+    public Result error(BusinessException e){
+        log.error("全局异常捕获", e);
+        return Result.fail(e.getCode(), e.getMessage());
+    }
 }

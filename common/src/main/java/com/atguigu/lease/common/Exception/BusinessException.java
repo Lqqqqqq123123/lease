@@ -1,5 +1,6 @@
 package com.atguigu.lease.common.Exception;
 
+import com.atguigu.lease.common.result.ResultCodeEnum;
 import lombok.Data;
 import org.jetbrains.annotations.TestOnly;
 
@@ -19,6 +20,11 @@ public class BusinessException extends RuntimeException {
     public BusinessException(BussinessExceptionEnum bussinessExceptionEnum) {
         super(bussinessExceptionEnum.getMessage());
         this.code = bussinessExceptionEnum.getCode();
+    }
+
+    public BusinessException(ResultCodeEnum resultCodeEnum){
+        super(resultCodeEnum.getMessage());
+        this.code = resultCodeEnum.getCode();
     }
 }
 
