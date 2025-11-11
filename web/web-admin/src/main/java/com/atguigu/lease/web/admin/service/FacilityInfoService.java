@@ -3,6 +3,8 @@ package com.atguigu.lease.web.admin.service;
 import com.atguigu.lease.model.entity.FacilityInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
 * @author liubo
 * @description 针对表【facility_info(配套信息表)】的数据库操作Service
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface FacilityInfoService extends IService<FacilityInfo> {
 
+    List<FacilityInfo> listFacilityInfoByRoomId(Long id);
 }

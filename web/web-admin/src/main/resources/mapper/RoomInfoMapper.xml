@@ -4,4 +4,72 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.atguigu.lease.web.admin.mapper.RoomInfoMapper">
 
+    <resultMap id="RoomItemVoMap" type="com.atguigu.lease.web.admin.vo.room.RoomItemVo">
+        <id column="id" property="id"></id>
+<!--        <result column="room_number" property="roomNumber"></result>-->
+<!--        <result column="rent" property="rent"></result>-->
+<!--        <result column="apartment_id" property="apartmentId"></result>-->
+<!--        <result column="is_release" property="isRelease"></result>-->
+<!--        <result column="lease_end_date" property="leaseEndDate"></result>-->
+<!--        <result column="isCheckin" property="isCheckIn"></result>-->
+        <association property="apartmentInfo" javaType="com.atguigu.lease.model.entity.ApartmentInfo">
+            <result column="ai_id" property="id"></result>
+<!--            <result column="name" property="name"></result>-->
+<!--            <result column="introduction" property="introduction"></result>-->
+<!--            <result column="district_id" property="districtId"></result>-->
+<!--            <result column="district_name" property="districtName"></result>-->
+<!--            <result column="city_id" property="cityId"></result>-->
+<!--            <result column="city_name" property="cityName"></result>-->
+<!--            <result column="province_id" property="provinceId"></result>-->
+<!--            <result column="province_name" property="provinceName"></result>-->
+<!--            <result column="address_detail" property="addressDetail"></result>-->
+<!--            <result column="latitude" property="latitude"></result>-->
+<!--            <result column="longitude" property="longitude"></result>-->
+<!--            <result column="phone" property="phone"></result>-->
+            <result column="ai_is_release" property="isRelease"></result>
+        </association>
+    </resultMap>
+    <select id="customPage" resultMap="RoomItemVoMap">
+        select
+            t1.*,
+            la.lease_end_date,
+            COALESCE(la.status in (2, 5, 7),0) isCheckIn,
+            ai.id as ai_id,
+            ai.name,
+            ai.introduction,
+            ai.district_id,
+            ai.district_name,
+            ai.city_id,
+            ai.city_name,
+            ai.province_id,
+            ai.province_name,
+            ai.address_detail,
+            ai.latitude,
+            ai.longitude,
+            ai.phone,
+            ai.is_release ai_is_release
+        from
+            (select * from room_info rm where rm.is_deleted=0) t1
+                left join
+                lease_agreement la
+            on t1.apartment_id = la.apartment_id and t1.id = la.room_id  and la.is_deleted=0
+                    left join
+                apartment_info ai
+            on
+                t1.apartment_id=ai.id and ai.is_deleted=0
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="queryVo.apartmentId != null">
+                and t1.apartment_id=#{queryVo.apartmentId}
+            </if>
+            <if test="queryVo.provinceId != null">
+                and ai.province_id=#{queryVo.provinceId}
+            </if>
+            <if test="queryVo.cityId != null">
+                and ai.city_id=#{queryVo.cityId}
+            </if>
+            <if test="queryVo.districtId != null">
+                and ai.district_id= #{queryVo.districtId}
+            </if>
+        </trim>
+    </select>
 </mapper>

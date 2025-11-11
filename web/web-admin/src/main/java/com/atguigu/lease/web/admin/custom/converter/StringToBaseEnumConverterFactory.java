@@ -7,19 +7,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StringToBaseEnumConverterFactory implements ConverterFactory<String, BaseEnum> {
-
     @Override
     public <T extends BaseEnum> Converter<String, T> getConverter(Class<T> targetType) {
         return new Converter<String, T>() {
             @Override
             public T convert(String source) {
-                T[] enumConstants = targetType.getEnumConstants();
-                for(T t: enumConstants){
-                    if (t.getCode() == Integer.parseInt(source)){
+                for (T t : targetType.getEnumConstants()) {
+                    if(t.getCode() == Integer.parseInt(source)){
                         return t;
                     }
                 }
-                throw new IllegalArgumentException("没有找到对应的枚举类");
+
+                throw new RuntimeException("枚举类值不匹配");
             }
         };
     }
