@@ -3,5 +3,55 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.atguigu.lease.web.admin.mapper.ViewAppointmentMapper">
+    <resultMap id="AppointmentVoMap" type="com.atguigu.lease.web.admin.vo.appointment.AppointmentVo">
+        <id column="id" property="id"></id>
+        <association property="apartmentInfo" javaType="com.atguigu.lease.model.entity.ApartmentInfo">
+            <id column="ai_id" property="id"></id>
+            <result column="ai_phone" property="phone"></result>
+        </association>
+    </resultMap>
 
+    <select id="customPage" resultMap="AppointmentVoMap">
+        select
+            va.*,
+            ai.id ai_id,
+            ai.name,
+            ai.introduction,
+            ai.district_id,
+            ai.district_name,
+            ai.city_id,
+            ai.city_name,
+            ai.province_id,
+            ai.province_name,
+            ai.address_detail,
+            ai.latitude,
+            ai.longitude,
+            ai.phone as ai_phone,
+            ai.is_deleted
+        from
+            view_appointment va
+                left join
+            apartment_info ai
+            on va.apartment_id = ai.id and va.is_deleted = 0 and ai.is_deleted = 0
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="vo.provinceId != null">
+                and ai.province_id = #{vo.provinceId}
+            </if>
+            <if test="vo.cityId != null">
+                and ai.city_id = #{vo.cityId}
+            </if>
+            <if test="vo.districtId != null">
+                and ai.district_id = #{vo.districtId}
+            </if>
+            <if test="vo.apartmentId != null">
+                and va.aprtment_id = #{vo.apartmentId}
+            </if>
+            <if test="vo.name != null">
+                and va.name like concat('%',#{vo.name},'%')
+            </if>
+            <if test="vo.phone != null">
+                and va.phone like concat('%',#{vo.phone},'%')
+            </if>
+        </trim>
+    </select>
 </mapper>
