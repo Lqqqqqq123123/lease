@@ -4,4 +4,96 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.atguigu.lease.web.admin.mapper.LeaseAgreementMapper">
 
+    <resultMap id="AgreementVo" type="com.atguigu.lease.web.admin.vo.apartment.agreement.AgreementVo">
+        <id column="id" property="id"></id>
+        <association property="apartmentInfo" javaType="com.atguigu.lease.model.entity.ApartmentInfo">
+            <id column="ai_id" property="id"></id>
+            <result column="ai_name" property="name"></result>
+            <result column="ai_phone" property="phone"></result>
+            <result column="ai_is_release" property="isRelease"></result>
+        </association>
+
+        <association property="roomInfo" javaType="com.atguigu.lease.model.entity.RoomInfo">
+            <id column="ri_id" property="id"></id>
+            <result column="ri_apartment_id" property="apartmentId"></result>
+            <result column="ri_is_release" property="isRelease"></result>
+            <result column="ri_rent" property="rent"></result>
+        </association>
+        
+        <association property="paymentType" javaType="com.atguigu.lease.model.entity.PaymentType">
+            <id column="pt_id" property="id"></id>
+            <result column="pt_name" property="name"></result>
+            <result column="pt_additional_info" property="additionalInfo"></result>
+        </association>
+        
+        <association property="leaseTerm" javaType="com.atguigu.lease.model.entity.LeaseTerm">
+            <id column="lt_id" property="id"></id>
+        </association>
+    </resultMap>
+
+    <select id="customPage" resultMap="AgreementVo">
+        select
+            la.*,
+            ai.id as ai_id,
+            ai.name as ai_name,
+            ai.introduction,
+            ai.district_id,
+            ai.district_name,
+            ai.city_id,
+            ai.city_name,
+            ai.province_id,
+            ai.province_name,
+            ai.address_detail,
+            ai.latitude,
+            ai.longitude,
+            ai.phone as ai_phone,
+            ai.is_release as ai_is_release,
+            ri.id as ri_id,
+            ri.room_number,
+            ri.rent as ri_rent,
+            ri.apartment_id as ri_apartment_id,
+            ri.is_release as ri_is_release,
+            pt.id as pt_id,
+            pt.name as pt_name,
+            pt.pay_month_count,
+            pt.additional_info as pt_additional_info,
+            lt.id as lt_id,
+            lt.month_count,
+            lt.unit
+        from
+            lease_agreement la
+                left join
+            apartment_info ai
+            on la.apartment_id = ai.id and la.is_deleted = 0 and ai.is_deleted = 0
+                left join room_info ri
+                          on la.room_id = ri.id and la.apartment_id = ri.apartment_id and ri.is_deleted = 0
+                left join payment_type pt
+                          on la.payment_type_id = pt.id and pt.is_deleted = 0
+                left join lease_term lt
+                          on la.lease_term_id = lt.id and lt.is_deleted = 0
+
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="vo.provinceId != null">
+                and ai.province_id = #{vo.provinceId}
+            </if>
+            <if test="vo.cityId != null">
+                and ai.city_id = #{vo.cityId}
+            </if>
+            <if test="vo.districtId != null">
+                and ai.district_id = #{vo.districtId}
+            </if>
+            <if test="vo.apartmentId != null">
+                and la.apartment_id = #{vo.apartmentId}
+            </if>
+            <if test="vo.roomNumber != null">
+                and ri.room_number = #{vo.roomNumber}
+            </if>
+            <if test="vo.name != null">
+                and la.name like concat('%', #{vo.name}, '%')
+            </if>
+            <if test="vo.phone != null">
+                and la.phono like concat('%', #{vo.phone}, '%')
+            </if>
+        </trim>
+    </select>
 </mapper>

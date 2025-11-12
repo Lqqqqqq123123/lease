@@ -40,7 +40,8 @@ public enum ResultCodeEnum {
 
     TOKEN_EXPIRED(601, "token过期"),
     TOKEN_INVALID(602, "token非法"),
-    ROOM_HAS_LEASE(701, "该房间任在出租中，无法删除");
+    ROOM_HAS_LEASE(701, "该房间任在出租中，无法删除"),
+    ID_NOT_EXIST_NOT_DELETE(702, "ID不存在，无法删除");
 
 
     private final Integer code;

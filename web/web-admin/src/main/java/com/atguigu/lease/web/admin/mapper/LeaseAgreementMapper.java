@@ -1,8 +1,11 @@
 package com.atguigu.lease.web.admin.mapper;
 
 import com.atguigu.lease.model.entity.LeaseAgreement;
+import com.atguigu.lease.web.admin.vo.apartment.agreement.AgreementQueryVo;
+import com.atguigu.lease.web.admin.vo.apartment.agreement.AgreementVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.apache.ibatis.annotations.Param;
 
 /**
 * @author liubo
@@ -12,6 +15,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 */
 public interface LeaseAgreementMapper extends BaseMapper<LeaseAgreement> {
 
+    IPage<AgreementVo> customPage(IPage<AgreementVo> page, @Param("vo") AgreementQueryVo queryVo);
 }
 
 
