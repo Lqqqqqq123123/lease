@@ -5,7 +5,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 import org.springframework.stereotype.Component;
 
-@Component
 public class StringToBaseEnumConverterFactory implements ConverterFactory<String, BaseEnum> {
 
     @Override
