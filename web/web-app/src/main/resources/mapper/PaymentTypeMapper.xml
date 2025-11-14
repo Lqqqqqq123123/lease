@@ -5,4 +5,13 @@
 <mapper namespace="com.atguigu.lease.web.app.mapper.PaymentTypeMapper">
 
 
+    <select id="customListByRoomId" resultType="com.atguigu.lease.model.entity.PaymentType">
+        select pt.*
+        from
+            (select * from room_payment_type rpt where rpt.room_id = 3 and rpt.is_deleted = 0) t1
+                left join
+            payment_type pt
+            on
+                t1.payment_type_id = pt.id and pt.is_deleted = 0
+    </select>
 </mapper>

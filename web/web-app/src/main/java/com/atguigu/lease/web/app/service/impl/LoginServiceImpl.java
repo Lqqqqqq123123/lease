@@ -58,7 +58,7 @@ public class LoginServiceImpl implements LoginService {
         request.setTemplateParam("{\"code\":\"" + i + "\"}");
 
         // 5. 发送验证码
-        smsClient.sendSms(request);
+        // smsClient.sendSms(request);
 
         return i;
     }

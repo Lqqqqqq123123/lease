@@ -5,4 +5,7 @@
 <mapper namespace="com.atguigu.lease.web.app.mapper.FeeValueMapper">
 
 
+    <select id="customFeeValueVoListByRoomId" resultType="com.atguigu.lease.web.app.vo.fee.FeeValueVo">
+
+    </select>
 </mapper>

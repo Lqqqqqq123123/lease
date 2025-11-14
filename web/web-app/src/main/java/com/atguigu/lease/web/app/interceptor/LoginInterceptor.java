@@ -20,7 +20,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
 
         // 2.解析 token
-
         JwtUtil.parseToken(token);
 
         return true;

@@ -23,6 +23,11 @@ public class LabelInfoServiceImpl extends ServiceImpl<LabelInfoMapper, LabelInfo
     public List<LabelInfo> customListByApartmentId(Long id) {
         return labelInfoMapper.customListByApartmentId(id);
     }
+
+    @Override
+    public List<LabelInfo> customListByRoomId(Long id) {
+        return labelInfoMapper.customListByRoomId(id);
+    }
 }
 
 

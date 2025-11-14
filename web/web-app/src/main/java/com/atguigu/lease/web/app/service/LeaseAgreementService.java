@@ -14,4 +14,17 @@ import java.util.List;
 */
 public interface LeaseAgreementService extends IService<LeaseAgreement> {
 
+    /**
+     * 返回当前用户的租约列表
+     * @param token
+     * @return
+     */
+    List<AgreementItemVo> customListItem(String token);
+
+    /**
+     * 根据租约id返回租约详情信息
+     * @param id
+     * @return
+     */
+    AgreementDetailVo customGetDetailById(Long id);
 }

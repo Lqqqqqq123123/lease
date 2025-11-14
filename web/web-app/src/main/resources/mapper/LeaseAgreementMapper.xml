@@ -4,5 +4,52 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.atguigu.lease.web.app.mapper.LeaseAgreementMapper">
 
+    <resultMap id="AgreementItemVo" type="com.atguigu.lease.web.app.vo.agreement.AgreementItemVo">
+        <id column="id" property="id"></id>
+        <result column="status" property="leaseStatus"></result>
+        <collection property="roomGraphVoList" ofType="com.atguigu.lease.web.app.vo.graph.GraphVo">
+            <id property="name" column="gi_name"></id>
+        </collection>
 
+
+
+    </resultMap>
+
+    <select id="customListItem" resultMap="AgreementItemVo">
+        SELECT
+            t1.*,
+            ai.name as apartment_name,
+            ri.room_number,
+            gi.name as gi_name,
+            gi.url
+        from
+            (select * from lease_agreement la where la.name = #{username} and la.is_deleted = 0) t1
+                left join
+            apartment_info ai
+            on
+                t1.apartment_id = ai.id and ai.is_deleted = 0
+                left join
+            room_info ri
+            on
+                t1.apartment_id = ri.apartment_id and t1.room_id = ri.id and ri.is_deleted = 0
+                left join
+            graph_info gi
+            on gi.item_id = t1.room_id and gi.item_type = 2 and gi.is_deleted = 0
+    </select>
+
+    <select id="getOtherVoById" resultType="com.atguigu.lease.web.app.vo.ltb.OtherVo">
+        select
+            pt.name as payment_type_name,
+            lt.month_count as lease_term_month_count,
+            lt.unit as lease_term_unit
+        from
+                (select * from lease_agreement la where id = 1 and is_deleted = 0) t1
+                    left join
+            lease_term lt
+            on
+                t1.lease_term_id = lt.id and lt.is_deleted = 0
+                    left join
+            payment_type pt
+            on t1.payment_type_id = pt.id and pt.is_deleted = 0
+    </select>
 </mapper>

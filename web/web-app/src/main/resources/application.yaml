@@ -39,5 +39,5 @@ springdoc:
 # 拦截路径
 web:
   app:
-    exclude-path: /api/login/**
-    include-path: /api/**
+    exclude-path: /app/login/**
+    include-path: /app/**

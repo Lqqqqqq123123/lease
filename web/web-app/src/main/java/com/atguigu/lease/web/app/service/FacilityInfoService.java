@@ -18,4 +18,11 @@ public interface FacilityInfoService extends IService<FacilityInfo> {
      * @return
      */
     List<FacilityInfo> customListByApartmentId(Long id);
+
+    /**
+     * 根据房间id查询配套信息列表
+     * @param id
+     * @return
+     */
+    List<FacilityInfo> customListInfoByRoomId(Long id);
 }

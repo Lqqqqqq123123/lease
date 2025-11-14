@@ -26,5 +26,4 @@ public class ApartmentController {
         return Result.ok(vo);
     }
 
-
 }

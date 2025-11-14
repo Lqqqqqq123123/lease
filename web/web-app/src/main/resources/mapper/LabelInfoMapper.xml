@@ -14,4 +14,16 @@
             on
                 t1.label_id = li.id and li.is_deleted = 0
     </select>
+
+    <select id="customListByRoomId" resultType="com.atguigu.lease.model.entity.LabelInfo">
+        select
+            li.*
+        from
+                (select * from room_label rl where rl.room_id = #{id} and rl.is_deleted = 0)t1
+                    left join
+            label_info li
+            on t1.label_id = li.id and li.is_deleted = 0;
+    </select>
+
+
 </mapper>

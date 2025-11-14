@@ -15,5 +15,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface RoomInfoService extends IService<RoomInfo> {
 
+    /**
+     * 获取房间详情
+     * @param id
+     * @return
+     */
 
+    RoomDetailVo customGetDetailById(Long id);
 }

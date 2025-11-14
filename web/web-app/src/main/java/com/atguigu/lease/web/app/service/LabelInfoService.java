@@ -13,4 +13,6 @@ import java.util.List;
 public interface LabelInfoService extends IService<LabelInfo> {
 
     List<LabelInfo> customListByApartmentId(Long id);
+
+    List<LabelInfo> customListByRoomId(Long id);
 }
