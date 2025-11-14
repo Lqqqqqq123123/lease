@@ -1,0 +1,49 @@
+server:
+  port: 8081
+
+# 数据源相关配置
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://43.143.165.110:3306/lease?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2b8
+    username: root
+    password: liuqiang
+    hikari:
+      connection-test-query: SELECT 1 # 自动检测连接
+      connection-timeout: 60000 #数据库连接超时时间,默认30秒
+      idle-timeout: 500000 #空闲连接存活最大时间，默认600000（10分钟）
+      max-lifetime: 540000 #此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      maximum-pool-size: 12 #连接池最大连接数，默认是10
+      minimum-idle: 10 #最小空闲连接数量
+      pool-name: SPHHikariPool # 连接池名称
+  # redis相关配置
+  data:
+    redis:
+      host: 43.143.165.110
+      port: 6379
+
+
+# mybatis-plus相关配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    auto-mapping-behavior: full
+
+
+
+springdoc:
+  default-flat-param-object: true
+
+
+# 阿里短信服务
+aliyun:
+    sms:
+      access-key-id: LTAI5tDUqj2BgYPyJC17BWcw
+      access-key-secret: u0LqBQIIhoBaR6qFdq3K2Rcc4ZGZiE
+      endpoint: dysmsapi.aliyuncs.com
+
+# 拦截路径
+web:
+  app:
+    exclude-path: /api/login/**
+    include-path: /api/**

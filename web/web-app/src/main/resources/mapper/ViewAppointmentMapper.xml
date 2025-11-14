@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.lease.web.app.mapper.ViewAppointmentMapper">
+
+    <resultMap id="AppointmentItemVoMap" type="com.atguigu.lease.web.app.vo.appointment.AppointmentItemVo">
+        <id column="id" property="id"></id>
+        <collection property="graphVoList" ofType="com.atguigu.lease.web.app.vo.graph.GraphVo">
+            <result column="gi_name" property="name"></result>
+            <result column="url" property="url"></result>
+        </collection>
+    </resultMap>
+
+    <select id="listItem" resultMap="AppointmentItemVoMap">
+        select
+            va.*,
+            ai.name as apartment_name,
+            gi.id as gi_id,
+            gi.name as gi_name,
+            gi.url
+        from
+            view_appointment va
+                left join
+            apartment_info ai
+            on va.apartment_id = ai.id and va.is_deleted = 0 and ai.is_deleted = 0
+                left join
+            graph_info gi
+            on va.apartment_id = gi.item_id and gi.item_type = 1 and gi.is_deleted = 0
+            where va.user_id = #{userId}
+    </select>
+</mapper>

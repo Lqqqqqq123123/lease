@@ -229,7 +229,7 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
     }
 
     /**
-     * 自定义公寓形象的分页查询，由于结果没有 po 直接与 数据表映射，故自己写xml文件
+     * 自定义公寓信息的分页查询，由于结果没有 po 直接与 数据表映射，故自己写xml文件
      * @param page:分页参数
      * @param queryVo
      * @return

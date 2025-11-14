@@ -15,6 +15,12 @@ spring:
       maximum-pool-size: 12 #连接池最大连接数，默认是10
       minimum-idle: 10 #最小空闲连接数量
       pool-name: SPHHikariPool # 连接池名称
+  data:
+    redis:
+      host: 43.143.165.110
+      port: 6379
+
+
 
 #  servlet:
 #    max-request-size: 100MB
@@ -40,3 +46,9 @@ ltb:
 
 # 日志配置
 logging.level.root: info
+
+# 拦截路径配置
+web:
+  admin:
+    exclude-path: /admin/login/**, /doc.html
+    include-path: /admin/**

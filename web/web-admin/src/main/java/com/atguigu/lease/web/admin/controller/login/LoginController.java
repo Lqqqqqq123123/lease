@@ -2,33 +2,41 @@ package com.atguigu.lease.web.admin.controller.login;
 
 
 import com.atguigu.lease.common.result.Result;
+import com.atguigu.lease.web.admin.service.LoginService;
+import com.atguigu.lease.web.admin.service.SystemUserService;
 import com.atguigu.lease.web.admin.vo.login.CaptchaVo;
 import com.atguigu.lease.web.admin.vo.login.LoginVo;
 import com.atguigu.lease.web.admin.vo.system.user.SystemUserInfoVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "后台管理系统登录管理")
 @RestController
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class LoginController {
 
+    private final LoginService loginService;
     @Operation(summary = "获取图形验证码")
     @GetMapping("login/captcha")
     public Result<CaptchaVo> getCaptcha() {
-        return Result.ok();
+        CaptchaVo vo = loginService.getCaptcha();
+        return Result.ok(vo);
     }
 
     @Operation(summary = "登录")
     @PostMapping("login")
     public Result<String> login(@RequestBody LoginVo loginVo) {
-        return Result.ok();
+        String token = loginService.login(loginVo);
+        return Result.ok(token);
     }
 
     @Operation(summary = "获取登陆用户个人信息")
     @GetMapping("info")
-    public Result<SystemUserInfoVo> info() {
-        return Result.ok();
+    public Result<SystemUserInfoVo> info(@RequestHeader("access_token") String token) {
+        SystemUserInfoVo vo = loginService.info(token);
+        return Result.ok(vo);
     }
 }

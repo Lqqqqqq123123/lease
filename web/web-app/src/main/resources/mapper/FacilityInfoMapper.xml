@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.lease.web.app.mapper.FacilityInfoMapper">
+
+    <select id="customListByApartmentId" resultType="com.atguigu.lease.model.entity.FacilityInfo">
+        select fi.*
+        from
+            (select * from apartment_facility af where af.apartment_id = #{id} and af.is_deleted = 0) t1
+                left join
+            facility_info fi
+            on
+                t1.facility_id = fi.id and fi.is_deleted = 0
+    </select>
+</mapper>
