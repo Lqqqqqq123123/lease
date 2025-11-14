@@ -29,3 +29,7 @@ hs_err_pid*
 target
 .idea
 *.iml
+
+
+# 脱敏
+web/web-app/src/main/resources/application-safe.yaml
