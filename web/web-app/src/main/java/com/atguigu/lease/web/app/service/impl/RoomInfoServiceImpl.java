@@ -120,6 +120,12 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
         return vo;
 
     }
+
+    @Override
+    public void customPageItem(IPage page, RoomQueryVo queryVo) {
+        // todo 考虑到对多+分页，故需要分布查询
+        roomInfoMapper.customPageItem(page, queryVo);
+    }
 }
 
 

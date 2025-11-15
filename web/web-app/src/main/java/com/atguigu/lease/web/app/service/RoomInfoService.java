@@ -22,4 +22,11 @@ public interface RoomInfoService extends IService<RoomInfo> {
      */
 
     RoomDetailVo customGetDetailById(Long id);
+
+    /**
+     * 自定义条件分页查询
+     * @param page
+     * @param queryVo
+     */
+    void customPageItem(IPage page, RoomQueryVo queryVo);
 }

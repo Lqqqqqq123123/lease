@@ -27,7 +27,9 @@ public class RoomController {
     @Operation(summary = "分页查询房间列表")
     @GetMapping("pageItem")
     public Result<IPage<RoomItemVo>> pageItem(@RequestParam long current, @RequestParam long size, RoomQueryVo queryVo) {
-        return Result.ok();
+        IPage page = new Page<>(current, size);
+        roomInfoService.customPageItem(page, queryVo);
+        return Result.ok(page);
     }
 
     @Operation(summary = "根据id获取房间的详细信息")
